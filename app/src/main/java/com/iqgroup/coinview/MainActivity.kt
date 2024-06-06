@@ -1,29 +1,31 @@
 package com.iqgroup.coinview
 
-
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.layout.windowInsetsTopHeight
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -31,13 +33,17 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.iqgroup.coinview.model.TextViewModel
+import com.iqgroup.coinview.api.NetworkResult
+import com.iqgroup.coinview.model.ResponseViewModel
 import com.iqgroup.coinview.model.data.BitcoinPriceResponse
+import com.iqgroup.coinview.model.data.CurrencyEntry
 import com.iqgroup.coinview.ui.components.ExpandableContainer
 import com.iqgroup.coinview.ui.theme.CoinViewTestTheme
 
@@ -62,7 +68,7 @@ class MainActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
-    viewModel: TextViewModel = viewModel()
+    viewModel: ResponseViewModel = viewModel()
 ) {
 
     val bitcoinPriceResponse by viewModel.bitcoinPriceResponse.collectAsState()
@@ -74,7 +80,8 @@ fun MainScreen(
         val (statusSpacer,
             topBar,
             mainArea,
-            refreshButton) = createRefs()
+            refreshButton,
+            systemSpacer) = createRefs()
 
         Spacer(
             Modifier
@@ -103,66 +110,43 @@ fun MainScreen(
                 }
         )
 
-        Column(
-            modifier = Modifier
-                .verticalScroll(rememberScrollState())
-                .fillMaxHeight()
-                .background(MaterialTheme.colorScheme.secondary)
-                .constrainAs(mainArea) {
-                    top.linkTo(topBar.bottom)
-                    start.linkTo(parent.start)
+        when (bitcoinPriceResponse) {
+            is NetworkResult.Loading -> {
+                CenteredBox {
+                    CircularProgressIndicator()
                 }
-        ) {
-            bitcoinPriceResponse?.let {
-                val priceResponse = it
-                ExpandableContainer(title = "Time") {
-                    Column {
-                        Text(text = "Updated: ${priceResponse.time.updated}")
-                        Text(text = "Updated ISO: ${priceResponse.time.updatedISO}")
-                        Text(text = "Updated UK: ${priceResponse.time.updatedUK}")
-                    }
-                }
+            }
+            is NetworkResult.Success -> {
+                val priceResponse = (
+                        bitcoinPriceResponse as NetworkResult.Success<BitcoinPriceResponse>
+                        ).data
 
-                ExpandableContainer(title = "Disclaimer") {
-                    Text(text = priceResponse.disclaimer)
-                }
+                val scrollState = rememberScrollState()
 
-                ExpandableContainer(title = "Chart Name") {
-                    Text(text = priceResponse.chartName)
-                }
-
-                ExpandableContainer(title = "BPI") {
-                    Column {
-                        ExpandableContainer(title = "USD") {
-                            Column {
-                                Text(text = "Code: ${priceResponse.bpi.USD.code}")
-                                Text(text = "Description: ${priceResponse.bpi.USD.description}")
-                                Text(text = "Rate: ${priceResponse.bpi.USD.rate}")
-                                Text(text = "Symbol: ${priceResponse.bpi.USD.symbol}")
-                                Text(text = "Rate Float: ${priceResponse.bpi.USD.rateFloat}")
-                            }
+                Column(
+                    modifier = Modifier
+                        .verticalScroll(state = scrollState)
+                        .background(MaterialTheme.colorScheme.background)
+                        .constrainAs(mainArea) {
+                            top.linkTo(topBar.bottom)
+                            start.linkTo(parent.start)
+                            bottom.linkTo(systemSpacer.top)
+                            end.linkTo(parent.end)
+                            height = Dimension.fillToConstraints
                         }
-
-                        ExpandableContainer(title = "GBP") {
-                            Column {
-                                Text(text = "Code: ${priceResponse.bpi.GBP.code}")
-                                Text(text = "Description: ${priceResponse.bpi.GBP.description}")
-                                Text(text = "Rate: ${priceResponse.bpi.GBP.rate}")
-                                Text(text = "Symbol: ${priceResponse.bpi.GBP.symbol}")
-                                Text(text = "Rate Float: ${priceResponse.bpi.GBP.rateFloat}")
-                            }
-                        }
-
-                        ExpandableContainer(title = "EUR") {
-                            Column {
-                                Text(text = "Code: ${priceResponse.bpi.EUR.code}")
-                                Text(text = "Description: ${priceResponse.bpi.EUR.description}")
-                                Text(text = "Rate: ${priceResponse.bpi.EUR.rate}")
-                                Text(text = "Symbol: ${priceResponse.bpi.EUR.symbol}")
-                                Text(text = "Rate Float: ${priceResponse.bpi.EUR.rateFloat}")
-                            }
-                        }
-                    }
+                ) {
+                    BitcoinPriceView(priceResponse)
+                }
+            }
+            is NetworkResult.Error -> {
+                val errorMessage = (bitcoinPriceResponse as NetworkResult.Error).message
+                CenteredBox {
+                    Text(text = errorMessage)
+                }
+            }
+            null -> {
+                CenteredBox {
+                    Text(text = "An unknown error occurred.")
                 }
             }
         }
@@ -170,15 +154,90 @@ fun MainScreen(
         ExtendedFloatingActionButton(
             modifier = Modifier
                 .constrainAs(refreshButton) {
-                    bottom.linkTo(parent.bottom, margin = 16.dp)
-                    end.linkTo(parent.end, margin = 16.dp)
+                    bottom.linkTo(systemSpacer.top, margin = 2.dp)
+                    end.linkTo(parent.end, margin = 2.dp)
                 }
                 .padding(16.dp),
             onClick = { viewModel.refresh() },
             icon = { Icon(Icons.Filled.Refresh, "Refresh button.") },
             text = { Text(text = "Refresh") },
+            contentColor = MaterialTheme.colorScheme.onSurface,
+        )
+
+        Spacer(
+            Modifier
+                .windowInsetsBottomHeight(
+                    WindowInsets.systemBars
+                )
+                .height(IntrinsicSize.Min)
+                .constrainAs(systemSpacer) {
+                    bottom.linkTo(parent.bottom)
+                    start.linkTo(parent.start)
+                }
         )
 
     }
 
+}
+
+@Composable
+fun CenteredBox(content: @Composable () -> Unit) {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Center
+    ) {
+        content()
+    }
+}
+
+@Composable
+fun BitcoinPriceView(priceResponse: BitcoinPriceResponse) {
+
+    ExpandableContainer(title = "Time") {
+        Column {
+            DividedTextEntry(textContent = "Updated: ${priceResponse.time.updated}")
+            DividedTextEntry(textContent = "Updated ISO: ${priceResponse.time.updatedISO}")
+            DividedTextEntry(textContent = "Updated UK: ${priceResponse.time.updatedUK}")
+        }
+    }
+
+    ExpandableContainer(title = "Disclaimer") {
+        DividedTextEntry(textContent = priceResponse.disclaimer)
+    }
+
+    ExpandableContainer(title = "Chart Name") {
+        DividedTextEntry(textContent = priceResponse.chartName)
+    }
+
+    ExpandableContainer(title = "BPI") {
+        Column {
+            CurrencyDataView(title = "USD", priceResponse.bpi.USD)
+            CurrencyDataView(title = "GBP", priceResponse.bpi.GBP)
+            CurrencyDataView(title = "EUR", priceResponse.bpi.EUR)
+        }
+    }
+
+    Spacer(modifier = Modifier.height(8.dp))
+}
+
+@Composable
+fun CurrencyDataView(title: String, currencyEntry: CurrencyEntry) {
+    ExpandableContainer(title = title, MaterialTheme.colorScheme.secondaryContainer) {
+        Column {
+            DividedTextEntry(textContent = "Code: ${currencyEntry.code}")
+            DividedTextEntry(textContent = "Description: ${currencyEntry.description}")
+            DividedTextEntry(textContent = "Rate: ${currencyEntry.rate}")
+            DividedTextEntry(textContent = "Symbol: ${currencyEntry.symbol}")
+            DividedTextEntry(textContent = "Rate Float: ${currencyEntry.rateFloat}")
+        }
+    }
+}
+
+@Composable
+fun DividedTextEntry(textContent: String) {
+    Text(
+        text = textContent,
+        modifier = Modifier.padding(4.dp)
+    )
+    HorizontalDivider(thickness = 2.dp)
 }
