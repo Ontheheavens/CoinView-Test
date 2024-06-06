@@ -33,10 +33,9 @@
 - **Clean and Well-Structured Code:** Ensure that the code is clean and well-structured.
 - **Proper Network Error Handling:** The application should handle possible network errors correctly and display clear error messages to the user.
 
-
 ## Building the Project
 
-1. Clone the repository: git clone https://github.com/your-username/your-project.git
+1. Clone the repository via Git CLI or Github UI: git clone [https://github.com/Ontheheavens/CoinView-Test.git](https://github.com/Ontheheavens/CoinView-Test.git)
 
 2. Open the project in Android Studio:
 - Launch Android Studio.
