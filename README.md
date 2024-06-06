@@ -1,3 +1,7 @@
+## Preview:
+
+![](showcase/Preview.jpg)
+
 ## Test Task:
 
 **Objective:** Create a Kotlin application that retrieves data from the CoinDesk API to fetch the current Bitcoin price and displays this data in a user-friendly manner.
