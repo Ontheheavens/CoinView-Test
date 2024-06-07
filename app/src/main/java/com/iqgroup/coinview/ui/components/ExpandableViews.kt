@@ -63,6 +63,7 @@ fun ClickableHeader(text: String, background: Color, onClickItem: () -> Unit) {
             .padding(8.dp)
     ) {
         Text(
+            color = MaterialTheme.colorScheme.onSurface,
             text = text,
             fontSize = 17.sp,
             modifier = Modifier.fillMaxWidth()

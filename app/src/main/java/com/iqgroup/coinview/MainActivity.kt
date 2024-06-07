@@ -37,6 +37,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterStart
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -86,9 +87,11 @@ fun MainScreen(
 
         Spacer(
             Modifier
+                .background(MaterialTheme.colorScheme.background)
                 .windowInsetsTopHeight(
                     WindowInsets.statusBars
                 )
+                .fillMaxWidth()
                 .height(IntrinsicSize.Min)
                 .constrainAs(statusSpacer) {
                     top.linkTo(parent.top)
@@ -108,6 +111,7 @@ fun MainScreen(
                 }
         ) {
             Text(
+                color = MaterialTheme.colorScheme.onSurface,
                 text = "CoinView",
                 textAlign = TextAlign.Center,
                 fontSize = 24.sp,
@@ -148,12 +152,18 @@ fun MainScreen(
             is NetworkResult.Error -> {
                 val errorMessage = (bitcoinPriceResponse as NetworkResult.Error).message
                 CenteredBox {
-                    Text(text = errorMessage)
+                    Text(
+                        color = MaterialTheme.colorScheme.onSurface,
+                        text = errorMessage
+                    )
                 }
             }
             null -> {
                 CenteredBox {
-                    Text(text = "An unknown error occurred.")
+                    Text(
+                        color = MaterialTheme.colorScheme.onSurface,
+                        text = "An unknown error occurred."
+                    )
                 }
             }
         }
@@ -167,12 +177,16 @@ fun MainScreen(
                 .padding(16.dp),
             onClick = { viewModel.refresh() },
             icon = { Icon(Icons.Filled.Refresh, "Refresh button.") },
-            text = { Text(text = "Refresh") },
+            text = { Text(
+                color = MaterialTheme.colorScheme.onSurface,
+                text = "Refresh"
+            ) },
             contentColor = MaterialTheme.colorScheme.onSurface,
         )
 
         Spacer(
             Modifier
+                .background(MaterialTheme.colorScheme.background)
                 .windowInsetsBottomHeight(
                     WindowInsets.systemBars
                 )
@@ -243,6 +257,7 @@ fun CurrencyDataView(title: String, currencyEntry: CurrencyEntry) {
 @Composable
 fun DividedTextEntry(textContent: String) {
     Text(
+        color = MaterialTheme.colorScheme.onSurface,
         text = textContent,
         modifier = Modifier.padding(4.dp)
     )

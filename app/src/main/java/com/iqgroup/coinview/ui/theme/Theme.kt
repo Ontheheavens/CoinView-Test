@@ -8,26 +8,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+    primary = Color(0xFF2D5270), // Adjusted primary color for dark mode
+    primaryContainer = Color(0xFF4D5B85), // Adjusted primary container color for dark mode
+    secondary = Color(0xFF4D6B4F), // Adjusted secondary color for dark mode
+    secondaryContainer = Color(0xFF465347), // Adjusted secondary container color for dark mode
+    tertiaryContainer = Color(0xFF5F3A3A), // Adjusted tertiary container color for dark mode
+    tertiary = Color(0xFF72525D), // Adjusted tertiary color for dark mode
+    onTertiaryContainer = Color(0xFFD7CCC8),
+    background = Color(0xFF121212), // Dark background color
+    surface = Color(0xFF333333), // Dark surface color
+    error = Color(0xFFEF5350), // Adjusted error color for dark mode
+    onPrimary = Color(0xFFFFFFFF),
+    onSecondary = Color(0xFF000000),
+    onBackground = Color(0xFFFFFFFF),
+    onSurface = Color(0xFFFFFFFF),
+    onError = Color(0xFFFFFFFF)
 )
 
-/*
-private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40,
-
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-)
-*/
 
 private val LightColorScheme = lightColorScheme(
     primary = Color(0xFF8E9A9B),
@@ -70,7 +67,7 @@ fun CoinViewTestTheme(
     }
 
     MaterialTheme(
-        colorScheme = LightColorScheme,
+        colorScheme = colorScheme,
         typography = Typography,
         content = content
     )
