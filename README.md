@@ -1,3 +1,7 @@
+## Preview:
+
+![](showcase/Preview.jpg)
+
 ## Test Task:
 
 **Objective:** Create a Kotlin application that retrieves data from the CoinDesk API to fetch the current Bitcoin price and displays this data in a user-friendly manner.
@@ -35,12 +39,10 @@
 
 ## Building the Project
 
-1. Clone the repository via Git CLI or Github UI: git clone [https://github.com/Ontheheavens/CoinView-Test.git](https://github.com/Ontheheavens/CoinView-Test.git)
-
-2. Open the project in Android Studio:
+1. Clone the project via Android Studio:
 - Launch Android Studio.
-- Choose "Open an existing Android Studio project" from the welcome screen.
-- Navigate to the directory where you cloned the repository and select the project folder.
+- Choose "File" -> "New" -> "Project from Version Control" in top menu bar.
+- Enter repository URL (https://github.com/Ontheheavens/CoinView-Test.git) and press "Clone".
 
 3. Build the project:
 - Click on the "Build" menu.
@@ -52,6 +54,6 @@
 - Ensure that a physical device is connected to your computer, or start an Android emulator from Android Studio.
 
 2. Run the app from Android Studio:
-- Click on the green "play" button in the toolbar.
+- Click on the green "Play" button in the toolbar.
 - Select the device or emulator you want to run the app on.
 - Click "OK" to install and run the app.
