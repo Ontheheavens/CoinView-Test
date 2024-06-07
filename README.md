@@ -8,6 +8,8 @@
 
 **API for Use:** [CoinDesk API](https://api.coindesk.com/v1/bpi/currentprice.json)
 
+Note: CoinDesk implements some kind of caching on their end, therefore not every request will return new values. New data gets sent roughly every 30 seconds. Ideally, app UI should reflect this, but said functionality was omitted for the sake of time constraints.
+
 ### Main Requirements and Steps:
 
 1. **Project Setup:**
