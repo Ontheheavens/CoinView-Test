@@ -8,6 +8,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -34,9 +35,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment.Companion.Center
+import androidx.compose.ui.Alignment.Companion.CenterStart
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -64,8 +67,6 @@ class MainActivity : ComponentActivity() {
 
 }
 
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
     viewModel: ResponseViewModel = viewModel()
@@ -95,11 +96,8 @@ fun MainScreen(
                 }
         )
 
-        TopAppBar(
-            title = { Text(
-                text = "CoinView",
-                textAlign = TextAlign.Center
-            )},
+        Box(
+            contentAlignment = CenterStart,
             modifier = Modifier
                 .background(color = MaterialTheme.colorScheme.surfaceContainer)
                 .fillMaxWidth()
@@ -108,7 +106,16 @@ fun MainScreen(
                     top.linkTo(statusSpacer.bottom)
                     start.linkTo(parent.start)
                 }
-        )
+        ) {
+            Text(
+                text = "CoinView",
+                textAlign = TextAlign.Center,
+                fontSize = 24.sp,
+                modifier = Modifier.padding(
+                    PaddingValues(16.dp, 4.dp, 4.dp, 4.dp)
+                )
+            )
+        }
 
         when (bitcoinPriceResponse) {
             is NetworkResult.Loading -> {
