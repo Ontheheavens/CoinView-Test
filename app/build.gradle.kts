@@ -64,6 +64,7 @@ dependencies {
     implementation(libs.androidx.constraintlayout.compose.android)
     implementation(libs.androidx.lifecycle.viewmodel.compose.android)
     implementation(libs.jackson.module.kotlin)
+    implementation(libs.androidx.navigation.compose)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
