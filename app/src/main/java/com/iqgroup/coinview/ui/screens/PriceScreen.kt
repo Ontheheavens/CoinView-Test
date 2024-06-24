@@ -41,6 +41,7 @@ import com.iqgroup.coinview.api.NetworkResult
 import com.iqgroup.coinview.model.ResponseViewModel
 import com.iqgroup.coinview.model.data.BitcoinPriceResponse
 import com.iqgroup.coinview.navigation.DefaultNavArgs
+import com.iqgroup.coinview.navigation.DefaultTransitionStyles
 import com.iqgroup.coinview.ui.components.BitcoinPriceView
 import com.iqgroup.coinview.ui.components.CenteredBox
 import com.ramcosta.composedestinations.annotation.Destination
@@ -50,6 +51,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @Destination<RootGraph>(
     navArgs = DefaultNavArgs::class,
+    style = DefaultTransitionStyles::class,
     start = true
 )
 @Composable
