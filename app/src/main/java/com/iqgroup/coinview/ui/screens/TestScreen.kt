@@ -4,18 +4,27 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavController
-import com.iqgroup.coinview.navigation.Screens
+import com.iqgroup.coinview.navigation.DefaultNavArgs
 import com.iqgroup.coinview.ui.components.CenteredBox
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootGraph
+import com.ramcosta.composedestinations.generated.destinations.PriceScreenDestination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.spec.Direction
 
+@Destination<RootGraph>(
+    navArgs = DefaultNavArgs::class
+)
 @Composable
 fun TestScreen(
-    navController: NavController
+    navigator: DestinationsNavigator
 ) {
     CenteredBox {
         Column {
             Text("Test Screen")
-            Button(onClick = { navController.navigate(Screens.PriceScreen.route) }) {
+            Button(onClick = {
+                navigator.navigate(PriceScreenDestination.invoke())
+            }) {
                 Text(text = "To price screen")
             }
         }

@@ -37,18 +37,25 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import com.iqgroup.coinview.api.NetworkResult
 import com.iqgroup.coinview.model.ResponseViewModel
 import com.iqgroup.coinview.model.data.BitcoinPriceResponse
-import com.iqgroup.coinview.navigation.Screens
+import com.iqgroup.coinview.navigation.DefaultNavArgs
 import com.iqgroup.coinview.ui.components.BitcoinPriceView
 import com.iqgroup.coinview.ui.components.CenteredBox
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootGraph
+import com.ramcosta.composedestinations.generated.destinations.TestScreenDestination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
+@Destination<RootGraph>(
+    navArgs = DefaultNavArgs::class,
+    start = true
+)
 @Composable
 fun PriceScreen(
     viewModel: ResponseViewModel = viewModel(),
-    navController: NavController
+    navigator: DestinationsNavigator
 ) {
 
     val bitcoinPriceResponse by viewModel.bitcoinPriceResponse.collectAsState()
@@ -99,7 +106,9 @@ fun PriceScreen(
                     )
                 )
                 Spacer(modifier = Modifier.weight(1f))
-                Button(onClick = { navController.navigate(Screens.TestScreen.route) }) {
+                Button(onClick = {
+                    navigator.navigate(TestScreenDestination.invoke())
+                }) {
                     Text(text = "To test screen")
                 }
             }

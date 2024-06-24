@@ -9,7 +9,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
-import com.iqgroup.coinview.navigation.NavGraph
+import com.iqgroup.coinview.navigation.AppNavigation
 import com.iqgroup.coinview.ui.theme.CoinViewTestTheme
 
 class MainActivity : ComponentActivity() {
@@ -25,7 +25,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val navController = rememberNavController()
-                    NavGraph(navController = navController)
+                    AppNavigation(navController = navController)
                 }
             }
         }
